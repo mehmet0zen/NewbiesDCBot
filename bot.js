@@ -1,7 +1,9 @@
-require('dotenv').config()
+import Config from 'dotenv'
+Config.config();
+import {Count} from './counting.js'
 
 // Get Discord Controllers
-const { Client, GatewayIntentBits, REST, Routes, Events, Partials } = require('discord.js');
+import { Client, GatewayIntentBits, REST, Routes, Events, Partials } from 'discord.js';
 
 //# On Startup, Handle Rest
 const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
@@ -41,9 +43,12 @@ client.on(Events.ClientReady, () => {
     console.log("Ready to go!");
 });
 
+const counting = new Count('1032458977310674994');
 // When a Message is created
 client.on(Events.MessageCreate, (message) => {
     if (message.author.bot) return false; 
+
+    counting.count(message);
     console.log(`Message from ${message.author.username}: ${message.content}`);
 
     if (message.content === 'Hello') {
